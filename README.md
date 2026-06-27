@@ -13,7 +13,7 @@ Open http://localhost:6245 to see the inbox.
 > **Tip:** If port 6245 is taken, change the host port in `docker-compose.yml`:
 > ```yaml
 > ports:
->   - "YOUR_PORT:3000"
+>   - "YOUR_PORT:6245"
 > ```
 > Then restart with `docker-compose down && docker-compose up`.
 
@@ -73,7 +73,7 @@ config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `SMTP_PORT` | `1025` | SMTP server port |
-| `API_PORT` | `3000` | Web UI and API port |
+| `API_PORT` | `6245` | Web UI and API port |
 
 ## Local development
 
@@ -82,7 +82,7 @@ npm install
 npm run dev
 ```
 
-Requires Node.js 20+.
+Requires [Bun](https://bun.sh) (or Node.js 20+ if you prefer `npm run build && node dist/index.js`).
 
 ## Docker
 
@@ -91,7 +91,7 @@ Requires Node.js 20+.
 Pull and run the pre-built image — no cloning required:
 
 ```bash
-docker run -p 1025:1025 -p 6245:3000 flavindias/localmail
+docker run -p 1025:1025 -p 6245:6245 flavindias/localmail
 ```
 
 Open http://localhost:6245. The image supports `linux/amd64` and `linux/arm64` (Apple Silicon, AWS Graviton).
@@ -99,7 +99,7 @@ Open http://localhost:6245. The image supports `linux/amd64` and `linux/arm64` (
 Specific version:
 
 ```bash
-docker run -p 1025:1025 -p 6245:3000 flavindias/localmail:1.0.0
+docker run -p 1025:1025 -p 6245:6245 flavindias/localmail:1.1.0
 ```
 
 ### Docker Compose (from source)
@@ -112,7 +112,7 @@ docker-compose up --build
 
 ```bash
 docker build -t localmail .
-docker run -p 1025:1025 -p 6245:3000 localmail
+docker run -p 1025:1025 -p 6245:6245 localmail
 ```
 
 Emails are stored in memory and cleared when the container restarts.

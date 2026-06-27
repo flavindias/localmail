@@ -2,11 +2,15 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import { store } from '../storage/store';
 
-export function startApiServer(port: number): void {
+export function startApiServer(port: number, smtpPort = 1025): Promise<void> {
   const app = express();
 
   app.use(express.json());
   app.use(express.static(path.join(__dirname, '../../public')));
+
+  app.get('/api/config', (_req: Request, res: Response) => {
+    res.json({ smtpPort });
+  });
 
   // SSE endpoint
   app.get('/api/events', (req: Request, res: Response) => {
@@ -82,16 +86,19 @@ export function startApiServer(port: number): void {
     res.status(204).send();
   });
 
-  const httpServer = app.listen(port, () => {
-    console.log(`[API] Listening on port ${port}`);
-  });
+  return new Promise<void>((resolve, reject) => {
+    const httpServer = app.listen(port, () => {
+      console.log(`[API] Listening on port ${port}`);
+      resolve();
+    });
 
-  httpServer.on('error', (err: NodeJS.ErrnoException) => {
-    if (err.code === 'EADDRINUSE') {
-      console.error(`[API] Port ${port} is already in use. Set API_PORT env var to use a different port.`);
-    } else {
-      console.error('[API] Server error:', err);
-    }
-    process.exit(1);
+    httpServer.on('error', (err: NodeJS.ErrnoException) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`[API] Port ${port} is already in use. Set API_PORT env var to use a different port.`);
+      } else {
+        console.error('[API] Server error:', err);
+      }
+      reject(err);
+    });
   });
 }

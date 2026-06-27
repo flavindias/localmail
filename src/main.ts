@@ -83,6 +83,12 @@ function showWindow(): void {
 }
 
 app.whenReady().then(async () => {
+  // Set dock icon — in dev mode Electron uses its own icon otherwise
+  if (process.platform === 'darwin' && app.dock) {
+    const dockIcon = nativeImage.createFromPath(getAsset('icon.png'));
+    if (!dockIcon.isEmpty()) app.dock.setIcon(dockIcon);
+  }
+
   try {
     startSmtpServer(SMTP_PORT);
     await startApiServer(API_PORT, SMTP_PORT);

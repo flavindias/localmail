@@ -96,12 +96,29 @@ header {
 }
 
 .wordmark {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text);
+  text-decoration: none;
+}
+
+.wordmark-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+  display: block;
+  /* Josefin Sans uppercase cap-height sits above the em-box midpoint;
+     nudge the icon up to match the optical centre of the text. */
+  translate: 0 -2px;
+}
+
+.wordmark-text {
+  line-height: 1;
 }
 
 .smtp-status {
@@ -657,7 +674,13 @@ header {
 
 <!-- ─── Header ──────────────────────────────────────────── -->
 <header>
-  <span class="wordmark">LocalMail</span>
+  <span class="wordmark">
+    <svg class="wordmark-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"/>
+      <path d="M22 10l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"/>
+    </svg>
+    <span class="wordmark-text">LocalMail</span>
+  </span>
   <div class="smtp-status" id="smtp-badge">
     <span class="smtp-dot"></span>
     <span id="smtp-port">:1025</span>

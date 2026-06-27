@@ -426,7 +426,7 @@ header {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .detail-view { animation: slide-up 0.18s cubic-bezier(0.22, 1, 0.36, 1); }
+  .detail-view { animation: slide-up 0.18s cubic-bezier(0.22, 1, 0.36, 1) both; }
   @keyframes slide-up {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -701,6 +701,7 @@ header {
         <p class="empty-list-title" data-i18n="empty_list_title"></p>
         <code class="empty-list-code">smtp://localhost:1025</code>
       </div>
+      <div id="email-items"></div>
     </div>
   </aside>
 
@@ -756,7 +757,7 @@ header {
 
       <div class="tab-content">
         <div class="tab-pane active" id="pane-html" role="tabpanel">
-          <iframe id="html-frame" sandbox="allow-same-origin"></iframe>
+          <iframe id="html-frame" sandbox="allow-same-origin allow-popups"></iframe>
         </div>
         <div class="tab-pane" id="pane-text" role="tabpanel">
           <pre id="text-content" class="code-pane"></pre>
@@ -961,8 +962,8 @@ function updateCount() {
 // ─── Render list ───────────────────────────────────────────────
 function renderList() {
   const q = document.getElementById('search').value.toLowerCase();
-  const list = document.getElementById('email-list');
   const emptyEl = document.getElementById('empty-list');
+  const itemsEl = document.getElementById('email-items');
 
   const filtered = q
     ? emails.filter(e =>
@@ -971,20 +972,16 @@ function renderList() {
         (e.to ?? []).join(' ').toLowerCase().includes(q))
     : emails;
 
-  if (!filtered.length) {
-    list.innerHTML = '';
-    list.appendChild(emptyEl);
-    emptyEl.style.display = '';
-    return;
-  }
-  emptyEl.style.display = 'none';
+  emptyEl.style.display = filtered.length ? 'none' : '';
 
-  list.innerHTML = filtered.map(e => {
+  itemsEl.innerHTML = filtered.map(e => {
     const unread = !readIds.has(e.id);
     const active = e.id === selectedId;
     return `
       <div class="email-item${active ? ' active' : ''}${unread ? ' unread' : ''}"
-           data-id="${esc(e.id)}" role="listitem" tabindex="0" aria-selected="${active}">
+           data-id="${esc(e.id)}" role="listitem" tabindex="0" aria-selected="${active}"
+           onclick="selectEmail('${esc(e.id)}')"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectEmail('${esc(e.id)}')}">
         <div class="item-row-1">
           <span class="item-dot" aria-hidden="true"></span>
           <span class="item-from">${esc(e.from ?? t('no_sender'))}</span>
@@ -994,13 +991,6 @@ function renderList() {
         <div class="item-preview">${esc((e.preview ?? '').slice(0, 120))}</div>
       </div>`;
   }).join('');
-
-  list.querySelectorAll('.email-item').forEach(el => {
-    el.addEventListener('click', () => selectEmail(el.dataset.id));
-    el.addEventListener('keydown', ev => {
-      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); selectEmail(el.dataset.id); }
-    });
-  });
 }
 
 // ─── Fetch list ────────────────────────────────────────────────
@@ -1020,11 +1010,18 @@ async function selectEmail(id) {
   readIds.add(id);
   renderList();
   document.getElementById('detail-panel').classList.add('open');
+
+  let email;
   try {
     const res = await fetch(`/api/messages/${id}`);
-    if (!res.ok) return;
-    showDetail(await res.json());
-  } catch {}
+    if (!res.ok) { console.error('Fetch detail failed:', res.status); return; }
+    email = await res.json();
+  } catch(err) {
+    console.error('Network error fetching message:', err);
+    return;
+  }
+
+  showDetail(email);
 }
 
 // ─── Show detail ───────────────────────────────────────────────
@@ -1053,7 +1050,7 @@ function showDetail(email) {
 
   const frame = document.getElementById('html-frame');
   frame.srcdoc = email.html
-    ? email.html
+    ? '<base target="_blank">' + email.html
     : `<pre style="font-family:system-ui;font-size:13px;padding:20px;white-space:pre-wrap;color:#333">${esc(email.text ?? '')}</pre>`;
 
   document.getElementById('text-content').textContent =
@@ -1173,6 +1170,19 @@ function applyTheme(theme) {
 document.getElementById('theme-btn').addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme') || 'dark';
   applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+// ─── Email list interaction (delegated) ────────────────────────
+const emailListEl = document.getElementById('email-list');
+emailListEl.addEventListener('click', ev => {
+  const item = ev.target.closest('.email-item');
+  if (item) selectEmail(item.dataset.id);
+});
+emailListEl.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter' || ev.key === ' ') {
+    const item = ev.target.closest('.email-item');
+    if (item) { ev.preventDefault(); selectEmail(item.dataset.id); }
+  }
 });
 
 // ─── Init ──────────────────────────────────────────────────────

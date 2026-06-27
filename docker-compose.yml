@@ -4,7 +4,7 @@ services:
     build: .
     ports:
       - "1025:1025"
-      - "8081:3000"
+      - "6245:3000"
     environment:
       - SMTP_PORT=1025
       - API_PORT=3000

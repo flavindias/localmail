@@ -8,7 +8,14 @@ A local SMTP mail catcher with a web UI. Point your app's mailer at it during de
 docker-compose up --build
 ```
 
-Open http://localhost:3000 to see the inbox.
+Open http://localhost:6245 to see the inbox.
+
+> **Tip:** If port 6245 is taken, change the host port in `docker-compose.yml`:
+> ```yaml
+> ports:
+>   - "YOUR_PORT:3000"
+> ```
+> Then restart with `docker-compose down && docker-compose up`.
 
 ## Usage
 

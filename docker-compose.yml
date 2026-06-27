@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  localmail:
+    build: .
+    ports:
+      - "1025:1025"
+      - "8081:3000"
+    environment:
+      - SMTP_PORT=1025
+      - API_PORT=3000
+    restart: unless-stopped

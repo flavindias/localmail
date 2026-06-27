@@ -1,16 +1,16 @@
-FROM node:20-alpine AS builder
+FROM oven/bun:1-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN bun install
 COPY tsconfig.json ./
 COPY src ./src
-RUN npm run build
+RUN bun run build
 
-FROM node:20-alpine
+FROM oven/bun:1-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN bun install --production
 COPY --from=builder /app/dist ./dist
 COPY public ./public
-EXPOSE 1025 3000
-CMD ["node", "dist/index.js"]
+EXPOSE 1025 6245
+CMD ["bun", "run", "start"]

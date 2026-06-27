@@ -43,6 +43,29 @@
   --r-lg: 10px;
 }
 
+/* ─── Light theme ────────────────────────────────────────────── */
+
+[data-theme="light"] {
+  --bg:             oklch(0.96 0.005 248);
+  --surface:        oklch(0.99 0.003 248);
+  --surface-2:      oklch(0.94 0.006 248);
+  --surface-hover:  oklch(0.91 0.007 248);
+  --border:         oklch(0.87 0.008 248);
+  --border-2:       oklch(0.78 0.010 248);
+
+  --text:           oklch(0.20 0.015 248);
+  --text-2:         oklch(0.38 0.012 248);
+  --text-3:         oklch(0.58 0.010 248);
+
+  --accent:         oklch(0.60 0.17 82);
+  --accent-dim:     oklch(0.52 0.18 82);
+  --accent-faint:   oklch(0.60 0.17 82 / 0.10);
+  --accent-faint-2: oklch(0.60 0.17 82 / 0.18);
+
+  --danger:         oklch(0.52 0.22 20);
+  --success:        oklch(0.50 0.18 145);
+}
+
 html, body { height: 100%; }
 
 body {
@@ -63,7 +86,7 @@ body {
 header {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   padding: 0 20px;
   height: 52px;
   background: var(--surface);
@@ -112,7 +135,60 @@ header {
   font-weight: 400;
   color: var(--text-3);
   letter-spacing: 0.01em;
+  white-space: nowrap;
 }
+
+/* ─── Theme toggle ───────────────────────────────────────────── */
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r);
+  border: 1px solid var(--border-2);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { background: var(--surface-hover); color: var(--text); }
+
+.theme-btn .icon-sun  { display: none; }
+.theme-btn .icon-moon { display: block; }
+[data-theme="light"] .theme-btn .icon-sun  { display: block; }
+[data-theme="light"] .theme-btn .icon-moon { display: none; }
+
+/* ─── Language switcher ──────────────────────────────────────── */
+
+.lang-switcher {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  padding: 4px 7px;
+  background: var(--surface);
+  border: none;
+  color: var(--text-3);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.lang-btn:hover  { background: var(--surface-hover); color: var(--text-2); }
+.lang-btn.active { background: var(--accent-faint); color: var(--accent); }
+
+/* ─── Header button ──────────────────────────────────────────── */
 
 .header-btn {
   display: inline-flex;
@@ -128,7 +204,7 @@ header {
   font-weight: 500;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
-  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .header-btn:hover {
   color: var(--danger);
@@ -219,10 +295,9 @@ header {
   user-select: none;
 }
 
-.email-item:hover        { background: var(--surface-hover); }
-.email-item.active       { background: var(--accent-faint); }
+.email-item:hover  { background: var(--surface-hover); }
+.email-item.active { background: var(--accent-faint); }
 
-/* Reserve space for unread dot — always present, visible when unread */
 .item-row-1 {
   display: flex;
   align-items: center;
@@ -250,15 +325,15 @@ header {
   white-space: nowrap;
   transition: color 0.1s;
 }
-.email-item.unread .item-from  { font-weight: 600; }
-.email-item.active .item-from  { color: var(--accent); }
+.email-item.unread .item-from { font-weight: 600; }
+.email-item.active .item-from { color: var(--accent); }
 
 .item-time {
   font-size: 11px;
   color: var(--text-3);
   flex-shrink: 0;
 }
-.email-item.unread .item-time  { color: var(--accent); }
+.email-item.unread .item-time { color: var(--accent); }
 
 .item-subject {
   font-size: 12.5px;
@@ -418,7 +493,6 @@ header {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
-  letter-spacing: 0.01em;
 }
 .action-btn:hover { background: var(--surface-hover); color: var(--text); }
 .action-btn.danger:hover {
@@ -450,8 +524,8 @@ header {
   user-select: none;
   letter-spacing: 0.02em;
 }
-.tab:hover    { color: var(--text-2); }
-.tab.active   { color: var(--accent); border-bottom-color: var(--accent); }
+.tab:hover  { color: var(--text-2); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
 
 /* ─── Tab content ────────────────────────────────────────────── */
@@ -463,8 +537,8 @@ header {
   flex-direction: column;
 }
 
-.tab-pane              { display: none; flex: 1; overflow: hidden; flex-direction: column; }
-.tab-pane.active       { display: flex; }
+.tab-pane        { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.tab-pane.active { display: flex; }
 
 #html-frame {
   flex: 1;
@@ -573,13 +647,31 @@ header {
     :1025
   </div>
   <div class="header-spacer"></div>
-  <span class="msg-count" id="count-badge">No messages</span>
+  <span class="msg-count" id="count-badge"></span>
+
+  <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+    <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+    <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+  </button>
+
+  <div class="lang-switcher" role="group" aria-label="Language">
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="pt">PT</button>
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+  </div>
+
   <button class="header-btn" id="clear-all-btn">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <polyline points="3 6 5 6 21 6"/>
       <path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/>
     </svg>
-    Clear all
+    <span data-i18n="clear_all"></span>
   </button>
 </header>
 
@@ -596,7 +688,7 @@ header {
             <path d="m21 21-4.35-4.35"/>
           </svg>
         </span>
-        <input id="search" type="text" placeholder="Filter messages…" autocomplete="off" spellcheck="false" aria-label="Filter messages" />
+        <input id="search" type="text" autocomplete="off" spellcheck="false" />
       </div>
     </div>
 
@@ -606,14 +698,14 @@ header {
           <rect width="20" height="16" x="2" y="4" rx="2"/>
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
         </svg>
-        <p class="empty-list-title">No messages yet</p>
+        <p class="empty-list-title" data-i18n="empty_list_title"></p>
         <code class="empty-list-code">smtp://localhost:1025</code>
       </div>
     </div>
   </aside>
 
   <!-- Detail -->
-  <main class="detail" id="detail-panel" aria-label="Email detail">
+  <main class="detail" id="detail-panel">
 
     <div class="empty-state" id="empty-state">
       <div class="empty-state-icon">
@@ -622,52 +714,49 @@ header {
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
         </svg>
       </div>
-      <p class="empty-state-title">Select a message to read it</p>
-      <p class="empty-state-sub">
-        Send to <span class="smtp-code">smtp://localhost:1025</span><br>
-        and messages appear here in real time.
-      </p>
+      <p class="empty-state-title" data-i18n="empty_state_title"></p>
+      <p class="empty-state-sub" id="empty-state-sub"></p>
     </div>
 
     <div class="detail-view" id="detail-view" style="display:none">
 
-      <button class="back-btn" id="back-btn" aria-label="Back to inbox">
+      <button class="back-btn" id="back-btn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m15 18-6-6 6-6"/>
         </svg>
-        Inbox
+        <span data-i18n="inbox"></span>
       </button>
 
       <div class="detail-header">
         <p class="detail-subject" id="detail-subject"></p>
         <dl class="detail-meta" id="detail-meta"></dl>
         <div class="detail-actions">
-          <button class="action-btn" id="view-source-btn" title="View raw source">
+          <button class="action-btn" id="view-source-btn">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="16 18 22 12 16 6"/>
               <polyline points="8 6 2 12 8 18"/>
             </svg>
-            Source
+            <span data-i18n="source"></span>
           </button>
-          <button class="action-btn danger" id="delete-btn" title="Delete this message">
+          <button class="action-btn danger" id="delete-btn">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="3 6 5 6 21 6"/>
               <path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/>
             </svg>
-            Delete
+            <span data-i18n="delete"></span>
           </button>
         </div>
       </div>
 
       <div class="tabs" role="tablist">
-        <div class="tab active" data-tab="html"    role="tab" tabindex="0">HTML</div>
-        <div class="tab"        data-tab="text"    role="tab" tabindex="0">Plain text</div>
-        <div class="tab"        data-tab="source"  role="tab" tabindex="0">Raw source</div>
+        <div class="tab active" data-tab="html"   role="tab" tabindex="0"><span data-i18n="tab_html"></span></div>
+        <div class="tab"        data-tab="text"   role="tab" tabindex="0"><span data-i18n="tab_text"></span></div>
+        <div class="tab"        data-tab="source" role="tab" tabindex="0"><span data-i18n="tab_source"></span></div>
       </div>
 
       <div class="tab-content">
         <div class="tab-pane active" id="pane-html" role="tabpanel">
-          <iframe id="html-frame" sandbox="allow-same-origin" title="Email HTML content"></iframe>
+          <iframe id="html-frame" sandbox="allow-same-origin"></iframe>
         </div>
         <div class="tab-pane" id="pane-text" role="tabpanel">
           <pre id="text-content" class="code-pane"></pre>
@@ -684,10 +773,153 @@ header {
 
 <div id="toast" role="status" aria-live="polite">
   <span class="toast-dot" aria-hidden="true"></span>
-  <span id="toast-msg">New email received</span>
+  <span id="toast-msg"></span>
 </div>
 
 <script>
+
+// ─── Translations ───────────────────────────────────────────────
+const TRANSLATIONS = {
+  en: {
+    search_placeholder:  'Filter messages…',
+    empty_list_title:    'No messages yet',
+    empty_state_title:   'Select a message to read it',
+    empty_state_sub:     'Send to {smtp} and messages\nappear here in real time.',
+    clear_all:           'Clear all',
+    source:              'Source',
+    delete:              'Delete',
+    inbox:               'Inbox',
+    tab_html:            'HTML',
+    tab_text:            'Plain text',
+    tab_source:          'Raw source',
+    count_zero:          'No messages',
+    count_one:           '1 message',
+    count_many:          '{n} messages',
+    meta_from:           'From',
+    meta_to:             'To',
+    meta_received:       'Received',
+    meta_files:          'Files',
+    no_text_body:        '(no plain-text body)',
+    no_subject:          '(no subject)',
+    no_sender:           '(no sender)',
+    toast_new:           'New email received',
+  },
+  pt: {
+    search_placeholder:  'Filtrar mensagens…',
+    empty_list_title:    'Sem mensagens',
+    empty_state_title:   'Selecione uma mensagem para ler',
+    empty_state_sub:     'Envie para {smtp} e as mensagens\naparecem aqui em tempo real.',
+    clear_all:           'Limpar tudo',
+    source:              'Fonte',
+    delete:              'Excluir',
+    inbox:               'Caixa de entrada',
+    tab_html:            'HTML',
+    tab_text:            'Texto simples',
+    tab_source:          'Fonte bruta',
+    count_zero:          'Sem mensagens',
+    count_one:           '1 mensagem',
+    count_many:          '{n} mensagens',
+    meta_from:           'De',
+    meta_to:             'Para',
+    meta_received:       'Recebido',
+    meta_files:          'Arquivos',
+    no_text_body:        '(sem corpo em texto simples)',
+    no_subject:          '(sem assunto)',
+    no_sender:           '(sem remetente)',
+    toast_new:           'Novo e-mail recebido',
+  },
+  es: {
+    search_placeholder:  'Filtrar mensajes…',
+    empty_list_title:    'Sin mensajes',
+    empty_state_title:   'Selecciona un mensaje para leerlo',
+    empty_state_sub:     'Env\xeda a {smtp} y los mensajes\naparecen aqu\xed en tiempo real.',
+    clear_all:           'Borrar todo',
+    source:              'Fuente',
+    delete:              'Eliminar',
+    inbox:               'Bandeja de entrada',
+    tab_html:            'HTML',
+    tab_text:            'Texto plano',
+    tab_source:          'Fuente sin procesar',
+    count_zero:          'Sin mensajes',
+    count_one:           '1 mensaje',
+    count_many:          '{n} mensajes',
+    meta_from:           'De',
+    meta_to:             'Para',
+    meta_received:       'Recibido',
+    meta_files:          'Archivos',
+    no_text_body:        '(sin cuerpo en texto plano)',
+    no_subject:          '(sin asunto)',
+    no_sender:           '(sin remitente)',
+    toast_new:           'Nuevo correo recibido',
+  },
+  fr: {
+    search_placeholder:  'Filtrer les messages…',
+    empty_list_title:    'Aucun message',
+    empty_state_title:   'S\xe9lectionnez un message pour le lire',
+    empty_state_sub:     'Envoyez \xe0 {smtp} et les messages\napparaissent ici en temps r\xe9el.',
+    clear_all:           'Tout effacer',
+    source:              'Source',
+    delete:              'Supprimer',
+    inbox:               'Bo\xeete de r\xe9ception',
+    tab_html:            'HTML',
+    tab_text:            'Texte brut',
+    tab_source:          'Source brute',
+    count_zero:          'Aucun message',
+    count_one:           '1 message',
+    count_many:          '{n} messages',
+    meta_from:           'De',
+    meta_to:             '\xc0',
+    meta_received:       'Re\xe7u',
+    meta_files:          'Fichiers',
+    no_text_body:        '(pas de corps en texte brut)',
+    no_subject:          '(sans objet)',
+    no_sender:           '(sans exp\xe9diteur)',
+    toast_new:           'Nouveau courriel re\xe7u',
+  },
+};
+
+// ─── Language state ─────────────────────────────────────────────
+const SUPPORTED = ['en', 'pt', 'es', 'fr'];
+
+function detectLang() {
+  const saved = localStorage.getItem('localmail_lang');
+  if (saved && SUPPORTED.includes(saved)) return saved;
+  const browser = (navigator.language || 'en').toLowerCase().split('-')[0];
+  return SUPPORTED.includes(browser) ? browser : 'en';
+}
+
+let lang = detectLang();
+
+function t(key, vars) {
+  let str = (TRANSLATIONS[lang] || TRANSLATIONS.en)[key] || key;
+  if (vars) Object.entries(vars).forEach(([k, v]) => { str = str.replaceAll(`{${k}}`, v); });
+  return str;
+}
+
+function applyTranslations() {
+  // Static data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  // Search placeholder
+  document.getElementById('search').placeholder = t('search_placeholder');
+  document.getElementById('search').setAttribute('aria-label', t('search_placeholder'));
+
+  // Empty state sub — has smtp-code span inside
+  const smtpSpan = `<span class="smtp-code">smtp://localhost:1025</span>`;
+  const subLines = t('empty_state_sub', { smtp: '\x00' }).split('\n');
+  document.getElementById('empty-state-sub').innerHTML =
+    subLines.map((line, i) => line.replace('\x00', smtpSpan) + (i < subLines.length - 1 ? '<br>' : '')).join('');
+
+  // Lang button active state
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  // Re-render count (uses translated strings)
+  updateCount();
+}
 
 // ─── State ─────────────────────────────────────────────────────
 let emails = [];
@@ -723,7 +955,7 @@ function fmtTimeFull(iso) {
 function updateCount() {
   const n = emails.length;
   document.getElementById('count-badge').textContent =
-    n === 0 ? 'No messages' : n === 1 ? '1 message' : `${n} messages`;
+    n === 0 ? t('count_zero') : n === 1 ? t('count_one') : t('count_many', { n });
 }
 
 // ─── Render list ───────────────────────────────────────────────
@@ -752,14 +984,13 @@ function renderList() {
     const active = e.id === selectedId;
     return `
       <div class="email-item${active ? ' active' : ''}${unread ? ' unread' : ''}"
-           data-id="${esc(e.id)}" role="listitem" tabindex="0"
-           aria-selected="${active}">
+           data-id="${esc(e.id)}" role="listitem" tabindex="0" aria-selected="${active}">
         <div class="item-row-1">
           <span class="item-dot" aria-hidden="true"></span>
-          <span class="item-from">${esc(e.from ?? '(no sender)')}</span>
+          <span class="item-from">${esc(e.from ?? t('no_sender'))}</span>
           <span class="item-time">${fmtTime(e.date)}</span>
         </div>
-        <div class="item-subject">${esc(e.subject ?? '(no subject)')}</div>
+        <div class="item-subject">${esc(e.subject ?? t('no_subject'))}</div>
         <div class="item-preview">${esc((e.preview ?? '').slice(0, 120))}</div>
       </div>`;
   }).join('');
@@ -767,10 +998,7 @@ function renderList() {
   list.querySelectorAll('.email-item').forEach(el => {
     el.addEventListener('click', () => selectEmail(el.dataset.id));
     el.addEventListener('keydown', ev => {
-      if (ev.key === 'Enter' || ev.key === ' ') {
-        ev.preventDefault();
-        selectEmail(el.dataset.id);
-      }
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); selectEmail(el.dataset.id); }
     });
   });
 }
@@ -792,7 +1020,6 @@ async function selectEmail(id) {
   readIds.add(id);
   renderList();
   document.getElementById('detail-panel').classList.add('open');
-
   try {
     const res = await fetch(`/api/messages/${id}`);
     if (!res.ok) return;
@@ -805,18 +1032,18 @@ function showDetail(email) {
   document.getElementById('empty-state').style.display = 'none';
   const dv = document.getElementById('detail-view');
   dv.style.display = 'flex';
-  void dv.offsetWidth; // force reflow for animation replay
+  void dv.offsetWidth;
 
   document.getElementById('detail-subject').textContent =
-    email.subject ?? '(no subject)';
+    email.subject ?? t('no_subject');
 
   const rows = [
-    ['From',     email.from ?? '—'],
-    ['To',       (email.to ?? []).join(', ') || '—'],
-    ['Received', fmtTimeFull(email.date)],
+    [t('meta_from'),     email.from ?? '—'],
+    [t('meta_to'),       (email.to ?? []).join(', ') || '—'],
+    [t('meta_received'), fmtTimeFull(email.date)],
   ];
   if (email.attachments?.length) {
-    rows.push(['Files', email.attachments
+    rows.push([t('meta_files'), email.attachments
       .map(a => `${a.filename} (${(a.size / 1024).toFixed(1)} KB)`).join(', ')]);
   }
   document.getElementById('detail-meta').innerHTML = rows
@@ -830,9 +1057,8 @@ function showDetail(email) {
     : `<pre style="font-family:system-ui;font-size:13px;padding:20px;white-space:pre-wrap;color:#333">${esc(email.text ?? '')}</pre>`;
 
   document.getElementById('text-content').textContent =
-    email.text ?? '(no plain-text body)';
-  document.getElementById('source-content').textContent =
-    email.raw ?? '';
+    email.text ?? t('no_text_body');
+  document.getElementById('source-content').textContent = email.raw ?? '';
 
   activateTab('html');
 
@@ -863,8 +1089,9 @@ function activateTab(name) {
   document.querySelectorAll('.tab-pane').forEach(p =>
     p.classList.toggle('active', p.id === `pane-${name}`));
 }
-document.querySelectorAll('.tab').forEach(t =>
-  t.addEventListener('click', () => activateTab(t.dataset.tab)));
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+});
 
 // ─── Clear all ─────────────────────────────────────────────────
 document.getElementById('clear-all-btn').addEventListener('click', async () => {
@@ -888,14 +1115,32 @@ document.getElementById('back-btn').addEventListener('click', () => {
   renderList();
 });
 
+// ─── Language switcher ──────────────────────────────────────────
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    lang = btn.dataset.lang;
+    localStorage.setItem('localmail_lang', lang);
+    document.documentElement.lang = lang;
+    applyTranslations();
+    renderList();
+    // Re-render open email meta if visible
+    if (selectedId && document.getElementById('detail-view').style.display !== 'none') {
+      fetch(`/api/messages/${selectedId}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(email => { if (email) showDetail(email); })
+        .catch(() => {});
+    }
+  });
+});
+
 // ─── Toast ─────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
   clearTimeout(toastTimer);
   document.getElementById('toast-msg').textContent = msg;
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  const el = document.getElementById('toast');
+  el.classList.add('show');
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
 }
 
 // ─── SSE ───────────────────────────────────────────────────────
@@ -906,14 +1151,34 @@ function connectSSE() {
       const data = JSON.parse(ev.data);
       if (data.type === 'email:added') {
         await fetchEmails();
-        showToast('New email received');
+        showToast(t('toast_new'));
       }
     } catch {}
   };
   es.onerror = () => { es.close(); setTimeout(connectSSE, 5000); };
 }
 
+// ─── Theme ─────────────────────────────────────────────────────
+function getTheme() {
+  const saved = localStorage.getItem('localmail_theme');
+  if (saved === 'light' || saved === 'dark') return saved;
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('localmail_theme', theme);
+}
+
+document.getElementById('theme-btn').addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
 // ─── Init ──────────────────────────────────────────────────────
+applyTheme(getTheme());
+document.documentElement.lang = lang;
+applyTranslations();
 fetchEmails();
 connectSSE();
 

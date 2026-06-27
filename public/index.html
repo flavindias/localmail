@@ -615,6 +615,22 @@ header {
 #toast.show { transform: translateY(0); opacity: 1; }
 
 
+/* ─── macOS inset traffic-light clearance ────────────────────── */
+/* When running in Electron with titleBarStyle:'hiddenInset' the  */
+/* traffic-light buttons (≈76px wide) sit inside the header area. */
+
+.macos-inset header {
+  padding-left: 80px;
+  -webkit-app-region: drag; /* let the empty header area drag the window */
+}
+
+/* Interactive header children must still be clickable */
+.macos-inset header button,
+.macos-inset header .lang-switcher,
+.macos-inset header input {
+  -webkit-app-region: no-drag;
+}
+
 /* ─── Responsive ─────────────────────────────────────────────── */
 
 @media (max-width: 680px) {
@@ -642,9 +658,9 @@ header {
 <!-- ─── Header ──────────────────────────────────────────── -->
 <header>
   <span class="wordmark">LocalMail</span>
-  <div class="smtp-status">
+  <div class="smtp-status" id="smtp-badge">
     <span class="smtp-dot"></span>
-    :1025
+    <span id="smtp-port">:1025</span>
   </div>
   <div class="header-spacer"></div>
   <span class="msg-count" id="count-badge"></span>
@@ -778,6 +794,11 @@ header {
 </div>
 
 <script>
+
+// ─── Electron frame detection ───────────────────────────────────
+if (new URLSearchParams(location.search).get('frame') === 'inset') {
+  document.documentElement.classList.add('macos-inset');
+}
 
 // ─── Translations ───────────────────────────────────────────────
 const TRANSLATIONS = {
@@ -1191,6 +1212,9 @@ document.documentElement.lang = lang;
 applyTranslations();
 fetchEmails();
 connectSSE();
+fetch('/api/config').then(r => r.ok ? r.json() : null).then(cfg => {
+  if (cfg?.smtpPort) document.getElementById('smtp-port').textContent = ':' + cfg.smtpPort;
+}).catch(() => {});
 
 </script>
 </body>

@@ -86,17 +86,33 @@ Requires Node.js 20+.
 
 ## Docker
 
-Build and run with Docker Compose:
+### Docker Hub (recommended)
+
+Pull and run the pre-built image — no cloning required:
+
+```bash
+docker run -p 1025:1025 -p 6245:3000 flavindias/localmail
+```
+
+Open http://localhost:6245. The image supports `linux/amd64` and `linux/arm64` (Apple Silicon, AWS Graviton).
+
+Specific version:
+
+```bash
+docker run -p 1025:1025 -p 6245:3000 flavindias/localmail:1.0.0
+```
+
+### Docker Compose (from source)
 
 ```bash
 docker-compose up --build
 ```
 
-Or build the image directly:
+### Build locally
 
 ```bash
 docker build -t localmail .
-docker run -p 1025:1025 -p 3000:3000 localmail
+docker run -p 1025:1025 -p 6245:3000 localmail
 ```
 
 Emails are stored in memory and cleared when the container restarts.
